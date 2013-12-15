@@ -1,0 +1,20 @@
+/**
+ * Использование:
+ * Вставляем ссылку на gist в запись блога или страницу и он встроится, пример:
+ * https://gist.github.com/2926827
+ *
+ * Если в gist множество файлов, мы можете выбрать один из них, используя ссылку следующего формата:
+ * https://gist.github.com/2926827?file=embed-gist.php
+ */
+wp_embed_register_handler( 'gist', '/https:\/\/gist\.github\.com\/(\d+)(\?file=.*)?/i', 'wp_embed_handler_gist' );
+
+function wp_embed_handler_gist( $matches, $attr, $url, $rawattr ) {
+
+	$embed = sprintf(
+			'<script src="https://gist.github.com/%1$s.js%2$s"></script>',
+			esc_attr($matches[1]),
+			esc_attr($matches[2])
+			);
+
+	return apply_filters( 'embed_gist', $embed, $matches, $attr, $url, $rawattr );
+}
